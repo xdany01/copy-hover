@@ -56,30 +56,29 @@ document.addEventListener('mouseout', (event) => {
     }
 });
 
-// Evento de clic: Si se presiona Alt + Clic, copia el texto al portapapeles
+// Evento de clic: Si se presiona Clic cuaando la extension esta activa,
+// copia el texto al portapapeles
 document.addEventListener('click', (event) => {
     if (!isExtensionEnabled) return;
 
-    if (event.altKey) {
-        event.preventDefault();
-        event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
 
-        const target = event.target;
-        const textToCopy = target.innerText;
+    const target = event.target;
+    const textToCopy = target.innerText;
 
-        if (textToCopy) {
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showToast("¡Copiado al portapapeles!", "success");
+    if (textToCopy) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showToast("¡Copiado al portapapeles!", "success");
 
-                target.classList.add('copy-hover-copied');
-                setTimeout(() => {
-                    target.classList.remove('copy-hover-copied');
-                }, 400); // Un poco más largo para ver el efecto
-            }).catch(err => {
-                console.error('Error al copiar: ', err);
-                showToast("No se pudo copiar el texto", "error");
-            });
-        }
+            target.classList.add('copy-hover-copied');
+            setTimeout(() => {
+                target.classList.remove('copy-hover-copied');
+            }, 400); // Un poco más largo para ver el efecto
+        }).catch(err => {
+            console.error('Error al copiar: ', err);
+            showToast("No se pudo copiar el texto", "error");
+        });
     }
 }, true);
 
