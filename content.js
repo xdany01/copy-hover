@@ -33,18 +33,20 @@ document.addEventListener('mouseover', (event) => {
     if (!isExtensionEnabled) return;
     if (event.target.id === 'copy-hover-toast') return;
 
-    // Lógica para encontrar el mejor elemento de texto
-    // Preferimos nodos de texto directos o elementos de bloque con texto
-    let target = event.target;
+    if (event.altKey) {
+        // Lógica para encontrar el mejor elemento de texto
+        // Preferimos nodos de texto directos o elementos de bloque con texto
+        let target = event.target;
 
-    // Filtro simple: debe tener texto visible no vacío
-    if (target.innerText && target.innerText.trim().length > 0) {
-        if (lastHighlightedElement && lastHighlightedElement !== target) {
-            removeHighlight();
+        // Filtro simple: debe tener texto visible no vacío
+        if (target.innerText && target.innerText.trim().length > 0) {
+            if (lastHighlightedElement && lastHighlightedElement !== target) {
+                removeHighlight();
+            }
+
+            target.classList.add('copy-hover-highlight');
+            lastHighlightedElement = target;
         }
-
-        target.classList.add('copy-hover-highlight');
-        lastHighlightedElement = target;
     }
 });
 
@@ -61,24 +63,26 @@ document.addEventListener('mouseout', (event) => {
 document.addEventListener('click', (event) => {
     if (!isExtensionEnabled) return;
 
-    event.preventDefault();
-    event.stopPropagation();
+    if (event.altKey) {
+        event.preventDefault();
+        event.stopPropagation();
 
-    const target = event.target;
-    const textToCopy = target.innerText;
+        const target = event.target;
+        const textToCopy = target.innerText;
 
-    if (textToCopy) {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            showToast("¡Copiado al portapapeles!", "success");
+        if (textToCopy) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast("¡Copiado al portapapeles!", "success");
 
-            target.classList.add('copy-hover-copied');
-            setTimeout(() => {
-                target.classList.remove('copy-hover-copied');
-            }, 400); // Un poco más largo para ver el efecto
-        }).catch(err => {
-            console.error('Error al copiar: ', err);
-            showToast("No se pudo copiar el texto", "error");
-        });
+                target.classList.add('copy-hover-copied');
+                setTimeout(() => {
+                    target.classList.remove('copy-hover-copied');
+                }, 400); // Un poco más largo para ver el efecto
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+                showToast("No se pudo copiar el texto", "error");
+            });
+        }
     }
 }, true);
 
