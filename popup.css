@@ -62,7 +62,6 @@ h1 {
 
 .status-badge.active {
     background-color: rgba(0, 230, 118, 0.15);
-    /* Verde suave */
     color: var(--success);
 }
 
@@ -88,7 +87,7 @@ main {
     font-weight: 500;
 }
 
-/* Toggle Switch Nuevo Diseño */
+/* Toggle Switch */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -141,6 +140,76 @@ input:checked+.slider:before {
     margin: 4px 0;
 }
 
+/* Option Item */
+.option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+}
+
+.option-item:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.option-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.option-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.option-description {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Modifier Key Control */
+.modifier-control {
+    background-color: rgba(0, 230, 118, 0.05);
+    border-color: rgba(0, 230, 118, 0.2);
+}
+
+.modifier-select {
+    padding: 6px 12px;
+    background-color: rgba(0, 230, 118, 0.15);
+    color: var(--text-main);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.modifier-select:hover {
+    background-color: rgba(0, 230, 118, 0.25);
+    border-color: rgba(0, 230, 118, 0.4);
+}
+
+.modifier-select:focus {
+    border-color: var(--success);
+    box-shadow: 0 0 0 2px rgba(0, 230, 118, 0.2);
+}
+
+.modifier-select option {
+    background-color: var(--card-bg);
+    color: var(--text-main);
+}
+
+/* Instructions */
 .instructions {
     text-align: center;
     font-size: 13px;
@@ -153,6 +222,7 @@ input:checked+.slider:before {
     align-items: center;
     justify-content: center;
     gap: 6px;
+    flex-wrap: wrap;
 }
 
 .key,

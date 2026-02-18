@@ -2,10 +2,13 @@
 let isExtensionEnabled = false;
 // Almacena el último elemento que fue resaltado para poder limpiarlo después
 let lastHighlightedElement = null;
+// Tecla modificadora activa ('alt', 'ctrl', 'shift', 'none')
+let activeModifierKey = 'alt';
 
 // Cargar el estado inicial de la extensión desde el almacenamiento de Chrome
-chrome.storage.sync.get("isEnabled", (data) => {
+chrome.storage.sync.get(["isEnabled", "modifierKey"], (data) => {
     isExtensionEnabled = data.isEnabled || false;
+    activeModifierKey = data.modifierKey || 'alt';
 });
 
 // Escuchar cambios en la configuración (si el usuario activa/desactiva desde el popup)
@@ -15,6 +18,10 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
         if (!isExtensionEnabled) {
             removeHighlight();
         }
+    }
+    if (changes.modifierKey) {
+        activeModifierKey = changes.modifierKey.newValue;
+        removeHighlight();
     }
 });
 
@@ -26,16 +33,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             removeHighlight();
         }
     }
+    if (request.action === "updateModifierKey") {
+        activeModifierKey = request.modifierKey;
+        removeHighlight();
+    }
 });
+
+// Función que comprueba si la tecla modificadora está presionada según la configuración
+function isModifierActive(event) {
+    switch (activeModifierKey) {
+        case 'alt':   return event.altKey;
+        case 'ctrl':  return event.ctrlKey;
+        case 'shift': return event.shiftKey;
+        case 'none':  return true;
+        default:      return event.altKey;
+    }
+}
 
 // Evento cuando el mouse se mueve sobre un elemento: Resalta el texto si la extensión está activa
 document.addEventListener('mouseover', (event) => {
     if (!isExtensionEnabled) return;
     if (event.target.id === 'copy-hover-toast') return;
 
-    if (event.altKey) {
-        // Lógica para encontrar el mejor elemento de texto
-        // Preferimos nodos de texto directos o elementos de bloque con texto
+    if (isModifierActive(event)) {
         let target = event.target;
 
         // Filtro simple: debe tener texto visible no vacío
@@ -58,12 +78,12 @@ document.addEventListener('mouseout', (event) => {
     }
 });
 
-// Evento de clic: Si se presiona Clic cuaando la extension esta activa,
+// Evento de clic: Si se presiona Clic cuando la extension esta activa,
 // copia el texto al portapapeles
 document.addEventListener('click', (event) => {
     if (!isExtensionEnabled) return;
 
-    if (event.altKey) {
+    if (isModifierActive(event)) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -77,7 +97,7 @@ document.addEventListener('click', (event) => {
                 target.classList.add('copy-hover-copied');
                 setTimeout(() => {
                     target.classList.remove('copy-hover-copied');
-                }, 400); // Un poco más largo para ver el efecto
+                }, 400);
             }).catch(err => {
                 console.error('Error al copiar: ', err);
                 showToast("No se pudo copiar el texto", "error");

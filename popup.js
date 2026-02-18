@@ -2,6 +2,8 @@
 document.addEventListener('DOMContentLoaded', restoreOptions);
 // Guardar las opciones cuando el usuario cambia el interruptor
 document.getElementById('toggleExtension').addEventListener('change', saveOptions);
+// Guardar la tecla modificadora cuando cambia
+document.getElementById('modifierKey').addEventListener('change', saveModifierKey);
 
 // Función para guardar el estado de la extensión
 function saveOptions() {
@@ -11,7 +13,7 @@ function saveOptions() {
     chrome.storage.sync.set({ isEnabled: isEnabled }, () => {
         updateStatusUI(isEnabled);
 
-        // Enviar mensaje al script de contenido (content.js) para actualizar el estado en la página actual
+        // Enviar mensaje al script de contenido para actualizar el estado en la página actual
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
             if (tabs[0]) {
                 chrome.tabs.sendMessage(tabs[0].id, {
@@ -23,11 +25,43 @@ function saveOptions() {
     });
 }
 
+// Función para guardar la tecla modificadora
+function saveModifierKey() {
+    const modifier = document.getElementById('modifierKey').value;
+
+    chrome.storage.sync.set({ modifierKey: modifier }, () => {
+        updateModifierLabel(modifier);
+        // Enviar mensaje al script de contenido con la nueva tecla
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            if (tabs[0]) {
+                chrome.tabs.sendMessage(tabs[0].id, {
+                    action: "updateModifierKey",
+                    modifierKey: modifier
+                });
+            }
+        });
+    });
+}
+
+// Actualiza la etiqueta de la instrucción según la tecla seleccionada
+function updateModifierLabel(modifier) {
+    const instructionText = document.getElementById('instructionText');
+    const keyLabels = { alt: 'Alt', ctrl: 'Ctrl', shift: 'Shift', none: null };
+    const keyName = keyLabels[modifier];
+
+    if (keyName) {
+        instructionText.innerHTML = `Mantén <span class="key" id="modifierKeyLabel">${keyName}</span> + <span class="mouse">Clic</span> para copiar.`;
+    } else {
+        instructionText.innerHTML = `Haz <span class="mouse">Clic</span> para copiar.`;
+    }
+}
+
 // Restaurar el estado guardado al abrir el popup
 function restoreOptions() {
-    // Por defecto está desactivado (false) si no hay nada guardado
-    chrome.storage.sync.get({ isEnabled: false }, (items) => {
+    chrome.storage.sync.get({ isEnabled: false, modifierKey: 'alt' }, (items) => {
         document.getElementById('toggleExtension').checked = items.isEnabled;
+        document.getElementById('modifierKey').value = items.modifierKey;
+        updateModifierLabel(items.modifierKey);
         updateStatusUI(items.isEnabled);
     });
 }

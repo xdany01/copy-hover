@@ -92,7 +92,7 @@ La extensión usa `chrome.storage.sync` para:
 - Verifica que estés manteniendo presionada la tecla **Alt**
 
 **No puedo ver el ícono:**
-- Asegúrate de tener un archivo `icon512.png` en la carpeta `images/`
+- Asegúrate de tener un archivo `icon.png` en la carpeta `images/`
 - Recarga la extensión desde `chrome://extensions/`
 
 **El texto no se copia:**

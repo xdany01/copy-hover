@@ -32,7 +32,6 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-left: 4px solid #BB86FC;
-    /* Color de acento primario */
     border-radius: 8px;
 
     color: #fff;
@@ -57,6 +56,7 @@
     content: "📋";
     font-size: 18px;
 }
+
 #copy-hover-toast.error {
     border-left-color: #FF5252;
 }

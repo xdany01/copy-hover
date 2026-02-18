@@ -34,8 +34,24 @@
 
             <div class="divider"></div>
 
+            <!-- Selector de tecla modificadora -->
+            <div class="option-item modifier-control">
+                <div class="option-info">
+                    <span class="option-label">Tecla activadora</span>
+                    <span class="option-description">Tecla + Clic para copiar</span>
+                </div>
+                <select id="modifierKey" class="modifier-select">
+                    <option value="alt">Alt</option>
+                    <option value="ctrl">Ctrl</option>
+                    <option value="shift">Shift</option>
+                    <option value="none">Ninguna</option>
+                </select>
+            </div>
+
+            <div class="divider"></div>
+
             <div class="instructions">
-                <p>Mantén <span class="key">Alt</span> + <span class="mouse">Clic</span> para copiar.</p>
+                <p id="instructionText">Mantén <span class="key" id="modifierKeyLabel">Alt</span> + <span class="mouse">Clic</span> para copiar.</p>
             </div>
         </main>
     </div>
