@@ -41,6 +41,8 @@ Extensión de Chrome que te permite copiar texto de cualquier elemento web simpl
 
 ### Ejemplo de Uso
 
+<img title="" src="./images/animation.gif" alt="" data-align="center">
+
 ```
 1. Activa la extensión desde el popup
 2. Navega a cualquier página web
@@ -81,26 +83,31 @@ copy-hover/
 ### Almacenamiento
 
 La extensión usa `chrome.storage.sync` para:
+
 - Persistir el estado de activación entre sesiones
 - Sincronizar la configuración entre dispositivos con la misma cuenta de Chrome
 
 ## 🐛 Solución de Problemas
 
 **La extensión no funciona:**
+
 - Asegúrate de que esté activada en el popup (badge debe mostrar "ON")
 - Recarga la página web después de activarla
 - Verifica que estés manteniendo presionada la tecla **Alt**
 
 **No puedo ver el ícono:**
+
 - Asegúrate de tener un archivo `icon.png` en la carpeta `images/`
 - Recarga la extensión desde `chrome://extensions/`
 
 **El texto no se copia:**
+
 - Verifica los permisos del portapapeles en Chrome
 - Algunas páginas pueden bloquear el acceso al portapapeles por políticas de seguridad
 - Asegúrate de hacer clic mientras mantienes presionada la tecla Alt
 
 **El resaltado no aparece:**
+
 - Verifica que el elemento tenga texto visible (`innerText` no vacío)
 - Algunos elementos pueden tener estilos que ocultan el outline
 
